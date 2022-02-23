@@ -58,13 +58,13 @@ export default function Home() {
       const signer = await getProviderOrSigner(true);
       // Create a new instance of the Contract with a Signer, which allows
       // update methods
-      const whitelistContract = new Contract(
+      const lotteryContract = new Contract(
         LOTTERY_CONTRACT_ADDRESS,
         abi,
         signer
       );
       // call the addAddressToWhitelist from the contract
-      const tx = await whitelistContract.addAddressToWhitelist();
+      const tx = await lotteryContract.enter();
       setLoading(true);
       // wait for the transaction to get mined
       await tx.wait();
@@ -87,13 +87,13 @@ export default function Home() {
       const provider = await getProviderOrSigner();
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
-      const whitelistContract = new Contract(
+      const lotteryContract = new Contract(
         LOTTERY_CONTRACT_ADDRESS,
         abi,
         provider
       );
       // call the numAddressesWhitelisted from the contract
-      const _numberOfWhitelisted = await whitelistContract.numAddressesWhitelisted();
+      const _numberOfWhitelisted = await lotteryContract.numAddressesWhitelisted();
       setNumberOfWhitelisted(_numberOfWhitelisted);
     } catch (err) {
       console.error(err);
@@ -109,7 +109,7 @@ export default function Home() {
       // Even though it is a read transaction, since Signers are just special kinds of Providers,
       // We can use it in it's place
       const signer = await getProviderOrSigner(true);
-      const whitelistContract = new Contract(
+      const lotteryContract = new Contract(
         LOTTERY_CONTRACT_ADDRESS,
         abi,
         signer
@@ -117,7 +117,7 @@ export default function Home() {
       // Get the address associated to the signer which is connected to  MetaMask
       const address = await signer.getAddress();
       // call the whitelistedAddresses from the contract
-      const _joinedWhitelist = await whitelistContract.whitelistedAddresses(
+      const _joinedWhitelist = await lotteryContract.whitelistedAddresses(
         address
       );
       setJoinedWhitelist(_joinedWhitelist);
