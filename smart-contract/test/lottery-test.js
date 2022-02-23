@@ -26,4 +26,23 @@ describe("Lottery Contract", function () {
     expect(e.message.includes("Please send more money")).to.equal(true)
   });
 
+  
+  it("Should allow one account to enter based on successful payment ", async function () {
+    const Lottery = await ethers.getContractFactory("Lottery");
+    const lottery = await Lottery.deploy();
+    await lottery.deployed();
+
+    let e;
+
+    try {
+      await lottery.enter({value : ethers.utils.parseEther('0.06')})
+    } catch (error) {
+      e = error;
+    }
+
+    let players = await lottery.getPlayers();
+
+    expect(players.length).to.equal(1)
+  });
+
 });
