@@ -86,4 +86,26 @@ describe("Lottery Contract", function () {
     expect(e.message.includes("Only manager can call this function")).to.equal(true)
   });
 
+  it("should pick a winner and reset the players array", async function() {
+    const [owner, secondPerson] = await hre.ethers.getSigners();
+    const Lottery = await ethers.getContractFactory("Lottery");
+    const lottery = await Lottery.deploy();
+    await lottery.deployed();
+
+    await lottery.enter({value : ethers.utils.parseEther('2')})
+
+    const initialBalance = await hre.ethers.provider.getBalance(owner.address);
+
+    await lottery.pickWinner();
+
+    const finalBalance = await hre.ethers.provider.getBalance(owner.address);
+
+    let difference = finalBalance - initialBalance;
+
+    difference = difference / 1000000000000000000;
+
+    expect(difference).to.greaterThan(1.7)
+
+  })
+
 });
