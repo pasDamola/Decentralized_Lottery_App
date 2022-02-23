@@ -69,4 +69,21 @@ describe("Lottery Contract", function () {
     expect(players.length).to.equal(3)
   });
 
+  it("only owner can call pickWinner ", async function () {
+    const [owner, secondPerson] = await hre.ethers.getSigners();
+    const Lottery = await ethers.getContractFactory("Lottery");
+    const lottery = await Lottery.deploy();
+    await lottery.deployed();
+
+    let e;
+
+    try {
+      await lottery.connect(secondPerson).pickWinner()
+    } catch (error) {
+      e = error;
+    }
+
+    expect(e.message.includes("Only manager can call this function")).to.equal(true)
+  });
+
 });
