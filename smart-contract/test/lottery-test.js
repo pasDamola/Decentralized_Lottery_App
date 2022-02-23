@@ -105,6 +105,7 @@ describe("Lottery Contract", function () {
     difference = difference / 1000000000000000000;
 
     expect(difference).to.greaterThan(1.7)
+    expect(await lottery.getPlayers()).to.deep.equal([]);
 
   })
 
