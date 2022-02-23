@@ -28,6 +28,8 @@ describe("Lottery Contract", function () {
 
   
   it("Should allow one account to enter based on successful payment ", async function () {
+    const [owner] = await hre.ethers.getSigners();
+    console.log('owner', owner.address);
     const Lottery = await ethers.getContractFactory("Lottery");
     const lottery = await Lottery.deploy();
     await lottery.deployed();
@@ -42,6 +44,7 @@ describe("Lottery Contract", function () {
 
     let players = await lottery.getPlayers();
 
+    expect(owner.address).to.equal(players[0])
     expect(players.length).to.equal(1)
   });
 
